@@ -43,7 +43,7 @@ Tellux 自身的云、STBN、星空等运行资源默认从源码内置资源模
 
 `examples/index.html` 负责页面结构和文案：
 
-- 顶部导航包含 Tellux 品牌、能力、工作流、Sandcastle、社区作品和 GitHub 入口。
+- 顶部导航包含 Tellux 品牌、文档、示例（Sandcastle）、社区作品入口、语言下拉（`mountLanguageToggle` 的 `dropdown` 形态，位于 GitHub 图标左侧）和 GitHub 图标链接；`#capabilities` / `#workflow` 区块仍保留在页面上，供 gallery 页跨页深链（`./index.html#capabilities`）使用。gallery / Sandcastle / 示例页仍用默认 `split` 形态的 中文 | EN 双按钮。
 - Hero 区域展示 Tellux 的一句话定位：面向 Web 的开源三维地球引擎。
 - 页面中部介绍地球与相机、多源影像图层、3D Tiles、Cesium 地形、大气云和工程默认值。
 - 后续展示真实地形、大气和体积云效果素材。
@@ -54,7 +54,7 @@ Tellux 自身的云、STBN、星空等运行资源默认从源码内置资源模
 
 `examples/index.ts` 负责主页交互和 Hero 三维地球：
 
-- 绑定锚点平滑滚动和顶部导航滚动状态。
+- 绑定顶部导航滚动状态。
 - 调用 `mountFeaturedStrip()` 挂载首页社区案例精选条（空数据隐藏，语言切换重渲染）。
 - 在 `#portal-globe-viewer` 中创建 `tellux.Viewer`。
 - 使用 `examples/map-sources.config.ts` 配置示例 GIS 数据源，`examples/map-sources.ts` 据此生成 `exampleMapServiceConfig`。本地读 `localMapSourceProfile`（默认 `local`：ArcGIS 卫星影像 + Cesium Ion 地形），生产读 `productionMapSourceProfile`（默认 `cesiumIon`：Cesium Ion Bing 航空影像 + Cesium World Terrain），避免消耗天地图额度、也不把匿名 ArcGIS 瓦片打到线上。意图见 [示例站图源 profile](../../docs/intent/examples-map-source-profiles.md)。走天地图时，`pnpm dev` 经 Vite 代理 `/tianditu-t/{n}` 转发到 `t{n}.tianditu.gov.cn`，并把 Referer 改写成 `TELLUX_TIANDITU_DEV_REFERER`（默认 `https://tellux.cyanfish.site/`）。密钥仍只放 `.env`。

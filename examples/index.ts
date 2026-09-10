@@ -12,6 +12,7 @@ resolveLocale()
 applyTranslations(document)
 mountLanguageToggle({
   mount: document.querySelector("[data-lang-toggle]"),
+  variant: "dropdown",
   applyDocument: true,
 })
 mountDocsLink()
