@@ -43,14 +43,14 @@ Tellux 自身的云、STBN、星空等运行资源默认从源码内置资源模
 
 `examples/index.html` 负责页面结构和文案：
 
-- 顶部导航包含 Tellux 品牌、文档、示例（Sandcastle）、社区作品入口、语言下拉（`mountLanguageToggle` 的 `dropdown` 形态，位于 GitHub 图标左侧）和 GitHub 图标链接；`#capabilities` / `#workflow` 区块仍保留在页面上，供 gallery 页跨页深链（`./index.html#capabilities`）使用。gallery / Sandcastle / 示例页仍用默认 `split` 形态的 中文 | EN 双按钮。
+- 顶部导航包含 Tellux 品牌、文档、示例（Sandcastle）、社区作品入口、语言下拉（`mountLanguageToggle` 的 `dropdown` 形态，位于 GitHub 图标左侧）和 GitHub 图标链接；`#capabilities` / `#workflow` 区块仍保留在页面上，供 gallery 页跨页深链（`./index.html#capabilities`）使用。首页与 gallery 共用这套导航；Sandcastle / 示例页仍用默认 `split` 形态的 中文 | EN 双按钮。
 - Hero 区域展示 Tellux 的一句话定位：面向 Web 的开源三维地球引擎。
 - 页面中部介绍地球与相机、多源影像图层、3D Tiles、Cesium 地形、大气云和工程默认值。
 - 后续展示真实地形、大气和体积云效果素材。
 - `#showcase` 社区案例精选条：位于主内容末尾，只展示最新 3 条 + 「查看全部」入口（指向 `gallery.html`），空数据时整块隐藏。数据来自 `examples/showcase-data.ts`，由 `examples/showcase.ts` 的 `mountFeaturedStrip()` 渲染；完整列表与搜索 / 标签筛选在 gallery 页（`mountGallery()`）。
 - `portal-footer`：首页与 gallery 页共用。上行 Copyright © 2026 Tellux、MIT、GitHub、Releases、npm，以及作者 cyanfish（链到 `https://cyanfish.site`）；下行 Powered by Three.js / 3d-tiles-renderer / Takram。不放邮箱。不写 All rights reserved（与 MIT 许可冲突）。
 
-`examples/gallery.html` 是社区案例 gallery 页：复用 portal 壳（品牌导航 + 语言切换 + 文档链接 + 页脚致谢），页面主体为搜索框 + 标签筛选条 + 全量卡片网格，由 `examples/gallery.ts` 挂载。决策背景见 [notes/decisions/0001-community-showcase-gallery-page.md](../decisions/0001-community-showcase-gallery-page.md)。链接健康检查用 `scripts/check-showcase-links.mjs`（`pnpm check:showcase`）。
+`examples/gallery.html` 是社区案例 gallery 页：复用 portal 壳（与首页同构的品牌导航 / 语言下拉 / GitHub 图标 / 页脚致谢），页面主体为搜索框 + 标签筛选条 + 全量卡片网格，由 `examples/gallery.ts` 挂载。内容少时靠 `.portal.portal-gallery` 的纵向 flex + `.portal-gallery__content { flex: 1 }` 把页脚顶到视口底部。决策背景见 [notes/decisions/0001-community-showcase-gallery-page.md](../decisions/0001-community-showcase-gallery-page.md)。链接健康检查用 `scripts/check-showcase-links.mjs`（`pnpm check:showcase`）。
 
 `examples/index.ts` 负责主页交互和 Hero 三维地球：
 

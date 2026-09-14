@@ -284,13 +284,18 @@ a {
   color: var(--tellux-accent);
 }
 
-.portal-nav__links a {
+.portal-nav__links a,
+.portal-nav__links [aria-current="page"] {
   display: inline-grid;
   min-height: 36px;
   place-items: center;
   padding: 8px 12px;
   border-radius: 6px;
   text-decoration: none;
+}
+
+.portal-nav__links [aria-current="page"] {
+  color: #f8fafc;
 }
 
 .portal-nav__links a:hover,
@@ -1092,6 +1097,12 @@ a {
 }
 
 /* gallery 页 */
+.portal.portal-gallery {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .portal-gallery__nav {
   padding: 18px clamp(20px, 5vw, 76px) 0;
 }
@@ -1171,6 +1182,7 @@ a {
 }
 
 .portal-gallery__content {
+  flex: 1 0 auto;
   padding-top: 24px;
   padding-bottom: 88px;
 }
