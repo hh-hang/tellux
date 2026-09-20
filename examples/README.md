@@ -7,7 +7,7 @@
 `local_weather.png`、`turbulence.png`、`shape.bin`、`shape_detail.bin`、`stbn.bin` 和 `stars.bin`
 放到 `examples/public/tellux/`，再在示例入口中临时设置 `tellux.baseUrl = '/tellux/'`。
 
-本地 `pnpm dev` 默认使用 **ArcGIS 卫星影像 + Cesium Ion 地形**；生产构建默认使用 **Cesium Ion Bing 航空影像 + Cesium World Terrain**。两者都不请求天地图，避免消耗额度。
+本地 `pnpm dev` 默认使用 **ArcGIS 卫星影像 + Cesium Ion 地形**；生产构建默认使用 **Cesium Ion Bing 航空影像 + Cesium World Terrain**。两者都不请求天地图，避免消耗额度。首页 Hero 地球不走这套 profile：NASA Blue Marble XYZ 来自 `https://data.cyanfish.site/maptiles/blue-marble/`，不加载地形。
 
 GIS 数据源集中在 `examples/map-sources.config.ts`：改 `localMapSourceProfile` 后刷新即可切换本地示例；改 `productionMapSourceProfile` 后重新构建即可切换线上。
 

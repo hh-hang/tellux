@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest"
 import { createExampleMapServiceConfig, resolveMapSourceProfile } from "./map-sources"
-import { ARCGIS_WORLD_IMAGERY_URL } from "./map-sources.config"
+import {
+  ARCGIS_WORLD_IMAGERY_URL,
+  NASA_BLUE_MARBLE_IMAGERY_SOURCE,
+  NASA_BLUE_MARBLE_TILE_ORIGIN,
+  NASA_BLUE_MARBLE_TILE_PATH,
+  resolveNasaBlueMarbleTileUrl,
+} from "./map-sources.config"
 
 const baseOptions = {
   cesiumIonToken: "ion-token",
@@ -41,6 +47,25 @@ describe("resolveMapSourceProfile", () => {
         productionProfile: "tianditu",
       })
     ).toBe("local")
+  })
+})
+
+describe("NASA_BLUE_MARBLE_IMAGERY_SOURCE", () => {
+  it("uses the data.cyanfish.site XYZ template in production", () => {
+    expect(resolveNasaBlueMarbleTileUrl(false)).toBe(
+      `${NASA_BLUE_MARBLE_TILE_ORIGIN}${NASA_BLUE_MARBLE_TILE_PATH}`
+    )
+    expect(resolveNasaBlueMarbleTileUrl(true)).toBe(NASA_BLUE_MARBLE_TILE_PATH)
+  })
+
+  it("is geographic XYZ at z0–z1 for the homepage globe", () => {
+    expect(NASA_BLUE_MARBLE_IMAGERY_SOURCE).toMatchObject({
+      type: "xyz",
+      url: resolveNasaBlueMarbleTileUrl(),
+      projection: "EPSG:4326",
+      levels: 2,
+      tileDimension: 256,
+    })
   })
 })
 

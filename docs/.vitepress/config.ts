@@ -7,6 +7,32 @@ const examplesOrigin = (process.env.TELLUX_EXAMPLES_ORIGIN || 'http://127.0.0.1:
 export default ({ command }: ConfigEnv) => defineConfig({
   title: 'Tellux',
   description: 'An open-source 3D Earth engine for the web, for building digital globes, digital twins, 3D maps, and other geospatial 3D apps on real geographic coordinates and physical scale.',
+  // 图标文件在 examples/public/（站点 origin 根路径）。docs:dev 与 examples 不同端口，走 examples origin。
+  head: [
+    [
+      'link',
+      {
+        rel: 'icon',
+        href: `${command === 'serve' ? examplesOrigin : ''}/favicon.ico`,
+        sizes: '32x32'
+      }
+    ],
+    [
+      'link',
+      {
+        rel: 'icon',
+        href: `${command === 'serve' ? examplesOrigin : ''}/favicon.svg`,
+        type: 'image/svg+xml'
+      }
+    ],
+    [
+      'link',
+      {
+        rel: 'apple-touch-icon',
+        href: `${command === 'serve' ? examplesOrigin : ''}/apple-touch-icon.png`
+      }
+    ]
+  ],
   // 开发用相对 base（本地预览）；构建后 docs 与 examples 主站同级。
   base: command === 'serve' ? '/' : '/docs/',
   outDir: process.env.DOCS_OUT_DIR || '../examples/public/docs',

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Matches .portal-brand__mark: #141b22 plate + #e5ecef T -->
+  <rect width="32" height="32" rx="6.4" fill="#141b22" />
+  <rect
+    x="0.5"
+    y="0.5"
+    width="31"
+    height="31"
+    rx="5.9"
+    fill="none"
+    stroke="#c6d2db"
+    stroke-opacity="0.26"
+  />
+  <path fill="#e5ecef" d="M8 8h16v3.2h-6.4V23.6h-3.2V11.2H8z" />
+</svg>

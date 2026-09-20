@@ -1,4 +1,5 @@
 import { resolve } from "node:path"
+import https from "node:https"
 import { defineConfig, loadEnv, type ProxyOptions } from "vite"
 import {
   TIANDITU_DEV_TILE_PROXY_PREFIX,
@@ -20,18 +21,95 @@ function resolveTiandituDevReferer(raw: string): { origin: string; referer: stri
   }
 }
 
+function attachTelluxRefererHeaders(
+  refererOrigin: string
+): NonNullable<ProxyOptions["configure"]> {
+  const { origin, referer } = resolveTiandituDevReferer(refererOrigin)
+  return (proxy) => {
+    proxy.on("proxyReq", (proxyReq) => {
+      if (proxyReq.headersSent) return
+      try {
+        proxyReq.setHeader("Referer", referer)
+        proxyReq.setHeader("Origin", origin)
+      } catch {
+        // 套接字已发出请求头时再 setHeader 会抛 ERR_HTTP_HEADERS_SENT 并干掉整个 Vite。
+      }
+    })
+  }
+}
+
+/** data.cyanfish.site 偶发挂起时，必须在时限内结束浏览器请求，否则 HTTP/1.1 6 连接被占满，连 document 刷新都会卡住。 */
+const DATA_SITE_PROXY_TIMEOUT_MS = 8_000
+const dataSiteAgent = new https.Agent({
+  keepAlive: false,
+  timeout: DATA_SITE_PROXY_TIMEOUT_MS,
+  maxSockets: 6,
+})
+
+function endProxyResponse(
+  res: unknown,
+  status: number,
+  body: string
+) {
+  try {
+    if (
+      !res ||
+      typeof (res as { writeHead?: unknown }).writeHead !== "function" ||
+      (res as { headersSent?: boolean }).headersSent
+    ) {
+      return
+    }
+    const response = res as {
+      writeHead: (code: number, headers: Record<string, string>) => void
+      end: (payload: string) => void
+    }
+    response.writeHead(status, { "Content-Type": "text/plain; charset=utf-8" })
+    response.end(body)
+  } catch {
+    // 浏览器已断开或响应已结束。
+  }
+}
+
+function attachFailFastProxy(
+  inner?: NonNullable<ProxyOptions["configure"]>
+): NonNullable<ProxyOptions["configure"]> {
+  return (proxy, options) => {
+    inner?.(proxy, options)
+    proxy.on("proxyReq", (proxyReq, _req, res) => {
+      const timer = setTimeout(() => {
+        endProxyResponse(res, 504, "data-site proxy timeout")
+        proxyReq.destroy()
+      }, DATA_SITE_PROXY_TIMEOUT_MS)
+      proxyReq.on("response", () => clearTimeout(timer))
+    })
+    proxy.on("error", (error, _req, res) => {
+      console.error("[vite] data-site proxy error:", error.message)
+      endProxyResponse(res, 502, "data-site proxy error")
+    })
+  }
+}
+
+function createDataSiteProxy(
+  refererOrigin?: string
+): ProxyOptions {
+  return {
+    target: "https://data.cyanfish.site",
+    changeOrigin: true,
+    agent: dataSiteAgent,
+    timeout: DATA_SITE_PROXY_TIMEOUT_MS,
+    proxyTimeout: DATA_SITE_PROXY_TIMEOUT_MS,
+    configure: attachFailFastProxy(
+      refererOrigin ? attachTelluxRefererHeaders(refererOrigin) : undefined
+    ),
+  }
+}
+
 /**
  * 天地图浏览器端 key 校验 Referer。本地页面来源是 localhost，会被域名白名单
  * 拒绝；开发代理把请求转到 t{n}.tianditu.gov.cn，并改写成已备案域名。
  */
 function createTiandituDevProxy(refererOrigin: string): Record<string, ProxyOptions> {
-  const { origin, referer } = resolveTiandituDevReferer(refererOrigin)
-  const attachReferer: NonNullable<ProxyOptions["configure"]> = (proxy) => {
-    proxy.on("proxyReq", (proxyReq) => {
-      proxyReq.setHeader("Referer", referer)
-      proxyReq.setHeader("Origin", origin)
-    })
-  }
+  const attachReferer = attachTelluxRefererHeaders(refererOrigin)
 
   const tileProxies = Object.fromEntries(
     TIANDITU_SUBDOMAINS.map((subdomain) => [
@@ -94,18 +172,16 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, projectRoot, "")
   const geoserverProxyTarget =
     env.TELLUX_EXAMPLE_GEOSERVER_PROXY_TARGET ?? "http://localhost:8080"
+  const telluxDevReferer =
+    env.TELLUX_TIANDITU_DEV_REFERER ?? "https://tellux.cyanfish.site/"
   const exampleProxy: Record<string, ProxyOptions> = {
     "/geoserver": {
       target: geoserverProxyTarget,
       changeOrigin: true,
     },
-    "/3dtiles": {
-      target: "https://data.cyanfish.site",
-      changeOrigin: true,
-    },
-    ...createTiandituDevProxy(
-      env.TELLUX_TIANDITU_DEV_REFERER ?? "https://tellux.cyanfish.site/"
-    ),
+    "/3dtiles": createDataSiteProxy(),
+    "/maptiles": createDataSiteProxy(telluxDevReferer),
+    ...createTiandituDevProxy(telluxDevReferer),
   }
 
   return {
@@ -138,6 +214,23 @@ export default defineConfig(({ mode }) => {
         },
       ],
     },
+    plugins: [
+      {
+        name: "tellux-favicon",
+        transformIndexHtml(html) {
+          if (html.includes('rel="icon"')) return html
+          return html.replace(
+            "</head>",
+            [
+              '    <link rel="icon" href="/favicon.ico" sizes="32x32" />',
+              '    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />',
+              '    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />',
+              "  </head>",
+            ].join("\n")
+          )
+        },
+      },
+    ],
     server: {
       fs: {
         allow: [

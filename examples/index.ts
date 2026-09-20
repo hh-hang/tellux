@@ -1,12 +1,11 @@
-﻿import tellux from "../src"
-import {
+﻿import {
   applyTranslations,
   mountLanguageToggle,
   resolveLocale,
 } from "./i18n"
 import { mountDocsLink } from "./docs-link"
 import { mountFeaturedStrip } from "./showcase"
-import { exampleMapServiceConfig } from "./shared"
+import { NASA_BLUE_MARBLE_IMAGERY_SOURCE } from "./map-sources.config"
 
 resolveLocale()
 applyTranslations(document)
@@ -112,6 +111,17 @@ if (globeContainer instanceof HTMLElement) {
   const globeLoader = document.querySelector("#portal-globe-loader")
   const initialClockTime = new Date()
   initialClockTime.setUTCHours(9, 12, 0, 0)
+  void mountHeroGlobe(globeContainer, globeLoader, initialClockTime)
+}
+
+async function mountHeroGlobe(
+  globeContainer: HTMLElement,
+  globeLoader: Element | null,
+  initialClockTime: Date
+) {
+  // 推迟加载引擎：index.ts 的静态依赖只含门户壳，DOMContentLoaded 不必等 200+ 个 src 模块。
+  // Load the engine after the portal shell: static imports stay on the page chrome, so DCL does not wait for 200+ src modules.
+  const { default: tellux } = await import("../src")
 
   const hideGlobeLoader = () => {
     if (!(globeLoader instanceof HTMLElement) || globeLoader.dataset.hidden === "true") {
@@ -132,10 +142,10 @@ if (globeContainer instanceof HTMLElement) {
       currentTime: initialClockTime,
       shouldAnimate: false,
     },
-    terrain: exampleMapServiceConfig.createTerrainOptions(),
     overlays: [
       {
-        source: exampleMapServiceConfig.createImagerySource(),
+        name: "NASA Blue Marble",
+        source: NASA_BLUE_MARBLE_IMAGERY_SOURCE,
       },
     ],
     camera: {

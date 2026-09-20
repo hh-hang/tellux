@@ -155,6 +155,10 @@
     "可交互三维地球预览",
     "Interactive 3D globe preview"
   ],
+  "portal.hero.imageryCredit": [
+    "影像：NASA Earth Observatory",
+    "Imagery: NASA Earth Observatory"
+  ],
   "portal.capabilities.eyebrow": [
     "Capabilities",
     "Capabilities"
