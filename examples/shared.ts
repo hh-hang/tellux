@@ -112,8 +112,8 @@ export function getTokenNoticeMessage() {
           en: "This example uses Cesium Ion Bing aerial imagery and terrain.",
         })
       : t({
-          zh: "当前示例使用 Cesium Ion Bing 航空影像和地形，请配置 VITE_CESIUM_ION_TOKEN。",
-          en: "This example uses Cesium Ion Bing aerial imagery and terrain; please set VITE_CESIUM_ION_TOKEN.",
+          zh: "当前示例使用 Cesium Ion Bing 航空影像和地形，请打开右上角设置填写 token。",
+          en: "This example uses Cesium Ion Bing aerial imagery and terrain; open Settings and paste a token.",
         })
   }
 

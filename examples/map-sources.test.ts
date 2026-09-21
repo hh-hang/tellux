@@ -124,6 +124,33 @@ describe("createExampleMapServiceConfig", () => {
     })
   })
 
+  it("does not start Cesium Ion imagery or terrain without a token", () => {
+    const config = createExampleMapServiceConfig({
+      ...baseOptions,
+      cesiumIonToken: "",
+      profile: "cesiumIon",
+    })
+
+    expect(config.createImagerySource()).toBeUndefined()
+    expect(config.createOverlays()).toEqual([])
+    expect(config.createTerrainOptions()).toBeUndefined()
+  })
+
+  it("keeps ArcGIS imagery when local Ion terrain has no token", () => {
+    const config = createExampleMapServiceConfig({
+      ...baseOptions,
+      cesiumIonToken: "",
+      profile: "local",
+    })
+
+    expect(config.createImagerySource()).toMatchObject({
+      type: "xyz",
+      url: ARCGIS_WORLD_IMAGERY_URL,
+    })
+    expect(config.createOverlays()).toHaveLength(1)
+    expect(config.createTerrainOptions()).toBeUndefined()
+  })
+
   it("uses Tianditu imagery and terrain for the tianditu profile", () => {
     const config = createExampleMapServiceConfig({
       ...baseOptions,

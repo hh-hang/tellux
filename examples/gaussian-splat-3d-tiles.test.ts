@@ -55,7 +55,8 @@ function setup() {
     CesiumIonAuthPlugin: class { constructor(options: unknown) { auth(options) } }, ImplicitTilingPlugin: class {},
     bootExampleI18n() {}, t: (value: any) => value.en,
     ExampleMessage: { error: errors },
-    exampleMapServiceConfig: { createTerrainOptions() {}, createImagerySource() {} },
+    defaultCesiumIonToken: '',
+    exampleMapServiceConfig: { createTerrainOptions() {}, createImagerySource() {}, createOverlays() { return [] } },
     createTelluxPanel: (factory: () => any) => {
       panel = { controls: controlsFrom(factory()), setStatus: vi.fn(), dispose() {} }
       return panel

@@ -4,6 +4,7 @@ import {
   defaultTiandituToken,
   defaultTiandituTokens,
   exampleMapServiceConfig,
+  defaultCesiumIonToken,
   tiandituTerrainServiceTemplate,
 } from "./shared"
 import { CESIUM_ION_WORLD_TERRAIN_ASSET_ID } from "./map-sources.config"
@@ -15,7 +16,7 @@ bootExampleI18n()
 type TerrainSource = "tianditu" | "cesium-ion"
 
 const DEFAULT_ION_TERRAIN_ASSET_ID = String(CESIUM_ION_WORLD_TERRAIN_ASSET_ID)
-const DEFAULT_ION_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_ION_TOKEN = defaultCesiumIonToken
 
 const container = document.querySelector("#viewer")
 
@@ -32,11 +33,7 @@ const viewer = new tellux.Viewer(container, {
     currentTime: initialClockTime,
   },
   terrain: defaultTerrain,
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: 103.51293447705049,
@@ -115,8 +112,8 @@ function createIonTerrainOptions(): TerrainOptions | null {
   if (!assetId || !apiToken) {
     setStatus(
       t({
-        zh: "请先输入 Cesium Ion terrain asset id 和 token，或在 .env 中配置默认值。",
-        en: "Enter Ion terrain asset id and token, or set defaults.",
+        zh: "请先输入 Cesium Ion terrain asset id 和 token，或打开右上角设置填写 token。",
+        en: "Enter Ion terrain asset id and token, or open Settings and paste a token.",
       })
     )
     return null
@@ -309,8 +306,8 @@ function bindPanelInteractions(
       password: true,
       placeholder: DEFAULT_ION_TOKEN
         ? t({
-            zh: "留空使用 VITE_CESIUM_ION_TOKEN",
-            en: "Leave empty to use VITE_CESIUM_ION_TOKEN",
+            zh: "留空使用设置里的 token",
+            en: "Leave empty to use the token from Settings",
           })
         : t({ zh: "输入 Cesium Ion token", en: "Enter Cesium Ion token" }),
     })

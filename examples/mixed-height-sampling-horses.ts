@@ -53,11 +53,7 @@ if (!(container instanceof HTMLElement)) {
 
 const viewer = new tellux.Viewer(container, {
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: -75.61915690102107,

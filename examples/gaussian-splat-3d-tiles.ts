@@ -6,7 +6,7 @@ import { GaussianSplatPlugin, SparkRenderer, SplatMesh, CesiumIonAuthPlugin, Imp
 import { bootExampleI18n, t } from "./i18n"
 import { createTelluxPanel, type TelluxPanel } from "./example-panel-leva"
 import { ExampleMessage } from "./example-message"
-import { exampleMapServiceConfig } from "./shared"
+import { exampleMapServiceConfig, defaultCesiumIonToken } from "./shared"
 
 bootExampleI18n()
 
@@ -22,7 +22,7 @@ const SOURCES = {
 }
 type SourceId = keyof typeof SOURCES
 const INITIAL_SOURCE: SourceId = SOURCES.custom.url ? "custom" : "ion"
-const DEFAULT_ION_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_ION_TOKEN = defaultCesiumIonToken
 const SAMPLE_VIEW = {
   longitude: -122.1382540879472,
   latitude: 47.64458159198655,
@@ -62,11 +62,7 @@ const viewer = new tellux.Viewer(container, {
       roll: SAMPLE_VIEW.roll,
     },
   },
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   scene: {
     atmosphere: {
       lighting: {
@@ -192,7 +188,7 @@ async function loadSource() {
     || (assetId === 4547222 ? CESIUM_ION_EVALUATION_TOKEN : DEFAULT_ION_TOKEN)
   clearSource()
   if (source === "ion" && (!Number.isSafeInteger(assetId) || assetId <= 0 || !apiToken)) {
-    setStatus(t({ zh: "请输入有效 Asset ID 和 ion token，或配置 VITE_CESIUM_ION_TOKEN。", en: "Enter a valid asset ID and ion token, or set VITE_CESIUM_ION_TOKEN." }))
+    setStatus(t({ zh: "请输入有效 Asset ID 和 ion token，或打开右上角设置填写 token。", en: "Enter a valid asset ID and ion token, or open Settings and paste a token." }))
     return
   }
   if (source !== "ion" && !url) {

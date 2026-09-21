@@ -10,11 +10,7 @@ async function main() {
       type: "webgpu",
     },
     terrain: exampleMapServiceConfig.createTerrainOptions(),
-    overlays: [
-      {
-        source: exampleMapServiceConfig.createImagerySource(),
-      },
-    ],
+    overlays: exampleMapServiceConfig.createOverlays(),
     camera: {
       destination: {
         longitude: -82,

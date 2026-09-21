@@ -6,7 +6,7 @@ import { bootExampleI18n, t } from "./i18n"
 
 import { createTelluxPanel, type TelluxPanel } from "./example-panel-leva"
 
-import { exampleMapServiceConfig } from "./shared"
+import { exampleMapServiceConfig, defaultCesiumIonToken } from "./shared"
 
 
 
@@ -32,7 +32,7 @@ const DEFAULT_ION_ASSET_ID =
 
   import.meta.env.VITE_CESIUM_ION_3D_TILESET_ASSET_ID ?? "354307"
 
-const DEFAULT_ION_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_ION_TOKEN = defaultCesiumIonToken
 
 
 
@@ -78,15 +78,7 @@ const viewer = new tellux.Viewer(container, {
 
   terrain: exampleMapServiceConfig.createTerrainOptions(),
 
-  overlays: [
-
-    {
-
-      source: exampleMapServiceConfig.createImagerySource(),
-
-    },
-
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
 
   scene: {
 
@@ -254,9 +246,9 @@ function loadIonTileset() {
 
       t({
 
-        zh: "请先输入 Cesium Ion asset id 和 token，或在 .env 中配置默认值。",
+        zh: "请先输入 Cesium Ion asset id 和 token，或打开右上角设置填写 token。",
 
-        en: "Enter Cesium Ion asset id and token, or configure defaults in .env.",
+        en: "Enter Cesium Ion asset id and token, or open Settings and paste a token.",
 
       })
 

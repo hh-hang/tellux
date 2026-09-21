@@ -21,11 +21,7 @@ const SURFACE_OFFSET = 50
 
 const viewer = new tellux.Viewer(container, {
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: 121.4648,

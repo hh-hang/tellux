@@ -4,14 +4,15 @@
  * 改 `localMapSourceProfile` 切换本地默认底图 / 地形（默认 `local`）；
  * 改 `productionMapSourceProfile` 切换生产构建默认（默认 `cesiumIon`）。
  *
- * 密钥不要写在这里，放项目根 `.env`：
- * - `VITE_CESIUM_ION_TOKEN`：Cesium Ion 影像 / 地形
- * - `VITE_TIANDITU_TOKEN`：天地图影像 / 地形（可逗号分隔多个 tk）
+ * 密钥不要写在这里：
+ * - Cesium Ion token：浏览器设置面板写入 `localStorage`（`tellux:cesium-ion-token`）
+ * - `VITE_TIANDITU_TOKEN`：天地图影像 / 地形（可逗号分隔多个 tk），仍放项目根 `.env`
  * - `VITE_CESIUM_TERRAIN_URL`：仅当某个 profile 的 terrain 选 `cesium-url` 时使用
  *
  * GIS data sources for examples. Change `localMapSourceProfile` for local
  * defaults (`local`) and `productionMapSourceProfile` for production builds
- * (`cesiumIon`). Keep secrets in `.env`.
+ * (`cesiumIon`). Cesium Ion tokens live in `localStorage`; Tianditu tokens
+ * stay in `.env`.
  */
 
 export const ARCGIS_WORLD_IMAGERY_URL =

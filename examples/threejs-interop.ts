@@ -39,11 +39,7 @@ async function main() {
       currentTime: initialClockTime,
     },
     terrain: exampleMapServiceConfig.createTerrainOptions(),
-    overlays: [
-      {
-        source: exampleMapServiceConfig.createImagerySource(),
-      },
-    ],
+    overlays: exampleMapServiceConfig.createOverlays(),
     camera: {
       destination: {
         longitude: MODEL_LONGITUDE,

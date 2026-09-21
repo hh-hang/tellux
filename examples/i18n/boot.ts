@@ -2,6 +2,7 @@ import { applyTranslations } from "./apply"
 import { LOCALE_STORAGE_KEY, getLocale, resolveLocale, setLocale } from "./locale"
 import type { Locale } from "./types"
 import { mountLanguageToggle } from "./toggle"
+import { mountExampleSettings } from "../cesium-ion-settings"
 
 let crossFrameLocaleSyncInstalled = false
 
@@ -41,8 +42,12 @@ export function bootExampleI18n(options: BootExampleI18nOptions = {}) {
 
   if (options.toggle === false) return
 
+  const chrome = document.createElement("div")
+  chrome.className = "example-chrome"
+  document.body.append(chrome)
+  mountExampleSettings({ mount: chrome })
   mountLanguageToggle({
-    mount: options.toggleMount ?? null,
+    mount: options.toggleMount ?? chrome,
     className: options.toggleClassName ?? "lang-toggle--example",
     applyDocument: true,
   })

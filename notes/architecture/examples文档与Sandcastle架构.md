@@ -58,7 +58,7 @@ Tellux 自身的云、STBN、星空等运行资源默认从源码内置资源模
 - 绑定顶部导航滚动状态。
 - 调用 `mountFeaturedStrip()` 挂载首页社区案例精选条（空数据隐藏，语言切换重渲染）。
 - 在 `#portal-globe-viewer` 中创建 `tellux.Viewer`。
-- 首页 Hero 地球不走示例站 GIS profile：底图是 `data.cyanfish.site` 上的 NASA Blue Marble XYZ（`EPSG:4326`，`/maptiles/blue-marble/{z}/{x}/{y}.jpg`，z0–z1），不加载地形（椭球即可）。生产直连该 origin；本地 `pnpm dev` 走 Vite `/maptiles` 代理并改写 Referer。代理 8s 无响应则结束浏览器请求，避免上游挂起占满 localhost 的 6 条 HTTP/1.1 连接（刷新 document 也会卡住）。`index.ts` 对 `../src` 用动态 `import()`，门户壳先完成 DCL，再加载 Viewer。地球角上署名 NASA Earth Observatory。其它独立示例仍用 `examples/map-sources.config.ts` 的 `exampleMapServiceConfig`。本地读 `localMapSourceProfile`（默认 `local`：ArcGIS 卫星影像 + Cesium Ion 地形），生产读 `productionMapSourceProfile`（默认 `cesiumIon`：Cesium Ion Bing 航空影像 + Cesium World Terrain）。意图见 [示例站图源 profile](../../docs/intent/examples-map-source-profiles.md)。走天地图时，`pnpm dev` 经 Vite 代理 `/tianditu-t/{n}` 转发到 `t{n}.tianditu.gov.cn`，并把 Referer 改写成 `TELLUX_TIANDITU_DEV_REFERER`（默认 `https://tellux.cyanfish.site/`）。密钥仍只放 `.env`。
+- 首页 Hero 地球不走示例站 GIS profile：底图是 `data.cyanfish.site` 上的 NASA Blue Marble XYZ（`EPSG:4326`，`/maptiles/blue-marble/{z}/{x}/{y}.jpg`，z0–z1），不加载地形（椭球即可）。生产直连该 origin；本地 `pnpm dev` 走 Vite `/maptiles` 代理并改写 Referer。代理 8s 无响应则结束浏览器请求，避免上游挂起占满 localhost 的 6 条 HTTP/1.1 连接（刷新 document 也会卡住）。`index.ts` 对 `../src` 用动态 `import()`，门户壳先完成 DCL，再加载 Viewer。地球角上署名 NASA Earth Observatory。其它独立示例仍用 `examples/map-sources.config.ts` 的 `exampleMapServiceConfig`。本地读 `localMapSourceProfile`（默认 `local`：ArcGIS 卫星影像 + Cesium Ion 地形），生产读 `productionMapSourceProfile`（默认 `cesiumIon`：Cesium Ion Bing 航空影像 + Cesium World Terrain）。意图见 [示例站图源 profile](../../docs/intent/examples-map-source-profiles.md)。走天地图时，`pnpm dev` 经 Vite 代理 `/tianditu-t/{n}` 转发到 `t{n}.tianditu.gov.cn`，并把 Referer 改写成 `TELLUX_TIANDITU_DEV_REFERER`（默认 `https://tellux.cyanfish.site/`）。天地图密钥仍只放 `.env`。Cesium Ion token 由独立示例页和 Sandcastle 父页右上角齿轮写入 `localStorage`（`tellux:cesium-ion-token`），不读 `VITE_CESIUM_ION_TOKEN`；首页、gallery 和 runner iframe 不挂该设置。空 token 时不创建 Ion 影像 / 地形，面板自动打开；保存后刷新页面。
 - 开启云、大气、镜头光晕、SMAA 和曝光设置，让首页直接展示 Tellux 的渲染能力。
 
 主页中的 viewer 会挂到 `window.viewer` 和 `window.portalViewer`，便于开发调试。页面卸载时调用 `viewer.destroy()` 释放资源。
@@ -141,7 +141,7 @@ Sandcastle 是一个可编辑、可运行示例的交互页面，设计上分成
 - 用 `new Function(...)` 注入 Tellux、Three.js、GLTFLoader 和共享示例工具后执行示例代码。
 - 劫持 console，将日志通过 `postMessage` 发回主应用。
 
-runner 注入的共享工具包括 `mountLocationReadout`、`setupExamplePanels`、`SYMBOL_ICON_URLS`、`exampleMapServiceConfig`、`t` / `bootExampleI18n`、HISM demo helpers 等。新增被示例 `import` 的本地模块时，必须同步在 `runner.ts` 的 `new Function` 参数列表中注入，否则 Sandcastle 剥离 import 后会报 `ReferenceError`。
+runner 注入的共享工具包括 `mountLocationReadout`、`setupExamplePanels`、`SYMBOL_ICON_URLS`、`exampleMapServiceConfig`、`defaultCesiumIonToken`、`t` / `bootExampleI18n`、HISM demo helpers 等。新增被示例 `import` 的本地模块时，必须同步在 `runner.ts` 的 `new Function` 参数列表中注入，否则 Sandcastle 剥离 import 后会报 `ReferenceError`。Cesium Ion 设置齿轮只挂在 Sandcastle 父页；runner 调用 `bootExampleI18n({ toggle: false })`，不在 iframe 里再挂一份。
 
 ### 中英文切换（i18n）
 

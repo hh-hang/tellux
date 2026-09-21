@@ -2,7 +2,7 @@ import type { TilesetLayer } from "../src"
 import tellux from "../src"
 import { bootExampleI18n, t } from "./i18n"
 import { createTelluxPanel, type TelluxPanel } from "./example-panel-leva"
-import { exampleMapServiceConfig } from "./shared"
+import { exampleMapServiceConfig, defaultCesiumIonToken } from "./shared"
 
 bootExampleI18n()
 
@@ -10,7 +10,7 @@ const MELBOURNE_POINT_CLOUD_ASSET_ID = "43978"
 const DEFAULT_ASSET_ID =
   import.meta.env.VITE_CESIUM_ION_POINT_CLOUD_ASSET_ID ??
   MELBOURNE_POINT_CLOUD_ASSET_ID
-const DEFAULT_ION_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_ION_TOKEN = defaultCesiumIonToken
 const MELBOURNE_VIEW = {
   latitude: -37.8136,
   longitude: 144.9631,
@@ -34,11 +34,7 @@ const viewer = new tellux.Viewer(container, {
     currentTime: initialClockTime,
   },
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: MELBOURNE_VIEW.longitude,
@@ -116,8 +112,8 @@ function loadPointCloudTileset() {
   if (!assetId || !apiToken) {
     setStatus(
       t({
-        zh: "请先输入 Cesium Ion asset id 和 token，或在 .env 中配置 VITE_CESIUM_ION_TOKEN。",
-        en: "Enter Cesium Ion asset id and token, or set VITE_CESIUM_ION_TOKEN.",
+        zh: "请先输入 Cesium Ion asset id 和 token，或打开右上角设置填写 token。",
+        en: "Enter Cesium Ion asset id and token, or open Settings and paste a token.",
       })
     )
     return

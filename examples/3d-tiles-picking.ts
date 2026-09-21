@@ -7,13 +7,13 @@ import type {
 } from "../src"
 import { bootExampleI18n, t } from "./i18n"
 import { createTelluxPanel, type TelluxPanel } from "./example-panel-leva"
-import { exampleMapServiceConfig } from "./shared"
+import { exampleMapServiceConfig, defaultCesiumIonToken } from "./shared"
 import { mountLocationReadout } from "./location-readout"
 
 bootExampleI18n()
 
 const DEFAULT_ASSET_ID = "75343"
-const DEFAULT_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_TOKEN = defaultCesiumIonToken
 
 const container = document.querySelector("#viewer")
 const hoverElement = document.querySelector<HTMLElement>("#feature-hover")
@@ -35,11 +35,7 @@ const viewer = new tellux.Viewer(container, {
     currentTime: initialClockTime,
   },
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: -74.01881302800248,
@@ -119,8 +115,8 @@ function loadTileset() {
   if (!assetId || !apiToken) {
     setStatus(
       t({
-        zh: "请先输入 Cesium Ion asset id 和 token，或在 .env 中配置 VITE_CESIUM_ION_TOKEN。",
-        en: "Enter asset id and token, or set VITE_CESIUM_ION_TOKEN.",
+        zh: "请先输入 Cesium Ion asset id 和 token，或打开右上角设置填写 token。",
+        en: "Enter asset id and token, or open Settings and paste a token.",
       })
     )
     return

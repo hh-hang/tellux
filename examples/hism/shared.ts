@@ -56,11 +56,7 @@ export function createHismDemoViewerOptions(options?: { includeTerrain?: boolean
   const includeTerrain = options?.includeTerrain !== false
   return {
     terrain: includeTerrain ? exampleMapServiceConfig.createTerrainOptions() : undefined,
-    overlays: [
-      {
-        source: exampleMapServiceConfig.createImagerySource(),
-      },
-    ],
+    overlays: exampleMapServiceConfig.createOverlays(),
     camera: {
       destination: {
         longitude: HISM_DEMO_VIEW_POSE.longitude,

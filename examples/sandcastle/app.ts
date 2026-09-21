@@ -2,6 +2,7 @@ import * as monaco from "monaco-editor"
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker"
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 import packageJson from "../../package.json"
+import { mountExampleSettings } from "../cesium-ion-settings"
 import {
   applyTranslations,
   mountLanguageToggle,
@@ -76,6 +77,7 @@ root.innerHTML = `
         <strong>${telluxVersion}</strong>
       </div>
       <div class="sandcastle-actions" data-i18n-attr="aria-label:sandcastle.actions.aria" aria-label="示例操作">
+        <div data-example-settings></div>
         <div data-lang-toggle></div>
         <a class="sandcastle-button" data-action="standalone" href="./sandcastle/runner.html" target="_blank" rel="noreferrer">Standalone</a>
       </div>
@@ -177,6 +179,10 @@ root.innerHTML = `
 
 resolveLocale()
 applyTranslations(sandcastleRoot)
+const settingsMount = sandcastleRoot.querySelector("[data-example-settings]")
+if (settingsMount instanceof HTMLElement) {
+  mountExampleSettings({ mount: settingsMount })
+}
 mountLanguageToggle({
   mount: sandcastleRoot.querySelector("[data-lang-toggle]"),
   applyDocument: false,

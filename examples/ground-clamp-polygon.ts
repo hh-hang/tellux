@@ -26,11 +26,7 @@ const REFERENCE_OFFSET_LON = 0.06
 
 const viewer = new tellux.Viewer(container, {
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: -112.1,

@@ -55,12 +55,10 @@ const viewer = new tellux.Viewer(container, {
     currentTime: initialClockTime,
   },
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      id: "imagery",
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays().map((layer) => ({
+    id: "imagery",
+    ...layer,
+  })),
   camera: {
     destination: {
       longitude: LOCAL_MEADOW_ANCHOR.longitude,

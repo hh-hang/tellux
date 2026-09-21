@@ -50,11 +50,7 @@ const viewer = new tellux.Viewer(container, {
     currentTime: initialClockTime,
   },
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: dujiangyanView.longitude,

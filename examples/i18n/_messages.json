@@ -47,6 +47,34 @@
     "加载中…",
     "Loading…"
   ],
+  "settings.gear.aria": [
+    "设置",
+    "Settings"
+  ],
+  "settings.panel.title": [
+    "设置",
+    "Settings"
+  ],
+  "settings.panel.ionHelp": [
+    "在 <a href=\"https://ion.cesium.com/tokens\" target=\"_blank\" rel=\"noopener noreferrer\">ion.cesium.com/tokens</a> 创建访问令牌，粘贴到下方后保存。没有 token 时不会请求 Cesium Ion 影像或地形。",
+    "Create an access token at <a href=\"https://ion.cesium.com/tokens\" target=\"_blank\" rel=\"noopener noreferrer\">ion.cesium.com/tokens</a>, paste it below, then save. Imagery and terrain will not request Cesium Ion until a token is saved."
+  ],
+  "settings.panel.ionLabel": [
+    "Cesium Ion token",
+    "Cesium Ion token"
+  ],
+  "settings.panel.ionPlaceholder": [
+    "粘贴 Cesium Ion token",
+    "Paste a Cesium Ion token"
+  ],
+  "settings.panel.save": [
+    "保存并刷新",
+    "Save and reload"
+  ],
+  "settings.panel.clear": [
+    "清除",
+    "Clear"
+  ],
   "common.folder.display": [
     "显示",
     "Display"
@@ -792,8 +820,8 @@
     "Enter a tileset.json URL, or set VITE_3D_TILESET_URL in .env."
   ],
   "example.3d-tiles.status.needIon": [
-    "请先输入 Cesium Ion asset id 和 token，或在 .env 中配置默认值。",
-    "Enter Cesium Ion asset id and token, or configure defaults in .env."
+    "请先输入 Cesium Ion asset id 和 token，或打开右上角设置填写 token。",
+    "Enter Cesium Ion asset id and token, or open Settings and paste a token."
   ],
   "example.3d-tiles.status.switchedUrl": [
     "已切换到 URL 加载；填写 tileset.json 地址后点击“加载”。",
@@ -872,8 +900,8 @@
     "Enter Cesium Ion token"
   ],
   "example.3d-tiles-picking.status.needCreds": [
-    "请先输入 Cesium Ion asset id 和 token，或在 .env 中配置 VITE_CESIUM_ION_TOKEN。",
-    "Enter asset id and token, or set VITE_CESIUM_ION_TOKEN."
+    "请先输入 Cesium Ion asset id 和 token，或打开右上角设置填写 token。",
+    "Enter asset id and token, or open Settings and paste a token."
   ],
   "example.3d-tiles-picking.status.loaded": [
     "3D Tiles 已加入场景。等待瓦片加载后移动鼠标拾取 feature。",
@@ -996,16 +1024,16 @@
     "Map data attribution"
   ],
   "example.google-photorealistic-3d-tiles.ph.tokenDefault": [
-    "留空使用 VITE_CESIUM_ION_TOKEN",
-    "Leave empty to use VITE_CESIUM_ION_TOKEN"
+    "留空使用设置里的 token",
+    "Leave empty to use the token from Settings"
   ],
   "example.google-photorealistic-3d-tiles.ph.tokenInput": [
     "输入 Cesium Ion token",
     "Enter Cesium Ion token"
   ],
   "example.google-photorealistic-3d-tiles.status.needToken": [
-    "请先输入 Cesium Ion token，或在 .env 中配置 VITE_CESIUM_ION_TOKEN。",
-    "Enter token or set VITE_CESIUM_ION_TOKEN."
+    "请先输入 Cesium Ion token，或打开右上角设置填写。",
+    "Enter a Cesium Ion token, or open Settings and paste one."
   ],
   "example.google-photorealistic-3d-tiles.status.loaded": [
     "已通过 viewer.tilesets.add 加载城市级海量 3D Tiles 模型。",
@@ -1120,8 +1148,8 @@
     "Enter Tianditu tk"
   ],
   "example.terrain.ph.ionDefault": [
-    "留空使用 VITE_CESIUM_ION_TOKEN",
-    "Leave empty to use VITE_CESIUM_ION_TOKEN"
+    "留空使用设置里的 token",
+    "Leave empty to use the token from Settings"
   ],
   "example.terrain.ph.ionInput": [
     "输入 Cesium Ion token",
@@ -1136,8 +1164,8 @@
     "Enter Tianditu tk or set VITE_TIANDITU_TOKEN."
   ],
   "example.terrain.status.needIon": [
-    "请先输入 Cesium Ion terrain asset id 和 token，或在 .env 中配置默认值。",
-    "Enter Ion terrain asset id and token, or set defaults."
+    "请先输入 Cesium Ion terrain asset id 和 token，或打开右上角设置填写 token。",
+    "Enter Ion terrain asset id and token, or open Settings and paste a token."
   ],
   "example.terrain.status.loadedTianditu": [
     "天地图 swdx 地形已通过 viewer.terrain.set 加载。",

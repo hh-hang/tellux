@@ -6,11 +6,7 @@ bootExampleI18n()
 
 const viewer = new tellux.Viewer("viewer", {
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: {
       longitude: -82,

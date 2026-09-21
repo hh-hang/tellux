@@ -10,6 +10,7 @@ import {
   productionMapSourceProfile,
   type MapSourceProfileId,
 } from "./map-sources.config"
+import { getCesiumIonToken } from "./cesium-ion-settings"
 import type {
   ImageryLayerSourceOptions,
   TerrainOptions,
@@ -35,13 +36,15 @@ export type {
   TerrainSourceId,
 } from "./map-sources.config"
 
-const cesiumIonToken = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const cesiumIonToken = getCesiumIonToken()
 const cesiumTerrainUrl = import.meta.env.VITE_CESIUM_TERRAIN_URL ?? ""
 const tiandituTokens = parseTiandituTokens(import.meta.env.VITE_TIANDITU_TOKEN ?? "")
 
 export interface ExampleMapServiceConfig {
   profile: MapSourceProfileId
-  createImagerySource(): ImageryLayerSourceOptions
+  createImagerySource(): ImageryLayerSourceOptions | undefined
+  /** 没有可用影像源（例如 Ion token 为空）时返回空数组。 */
+  createOverlays(): Array<{ source: ImageryLayerSourceOptions }>
   createTerrainOptions(): TerrainOptions | undefined
 }
 
@@ -79,7 +82,8 @@ function createArcGisImagerySource(): XYZImagerySourceOptions {
 
 function createCesiumIonImagerySource(
   options: CreateExampleMapServiceConfigOptions
-): ImageryLayerSourceOptions {
+): ImageryLayerSourceOptions | undefined {
+  if (!options.cesiumIonToken) return undefined
   return {
     type: "cesium-ion",
     assetId: mapSourceCatalog.imagery["cesium-ion"].assetId,
@@ -128,16 +132,22 @@ export function createExampleMapServiceConfig(
 ): ExampleMapServiceConfig {
   const { imagery, terrain } = mapSourceProfiles[options.profile]
 
+  const createImagerySource = () => {
+    if (imagery === "tianditu") {
+      return createTiandituXYZImagerySource(options.tiandituTokens)
+    }
+    if (imagery === "cesium-ion") {
+      return createCesiumIonImagerySource(options)
+    }
+    return createArcGisImagerySource()
+  }
+
   return {
     profile: options.profile,
-    createImagerySource: () => {
-      if (imagery === "tianditu") {
-        return createTiandituXYZImagerySource(options.tiandituTokens)
-      }
-      if (imagery === "cesium-ion") {
-        return createCesiumIonImagerySource(options)
-      }
-      return createArcGisImagerySource()
+    createImagerySource,
+    createOverlays: () => {
+      const source = createImagerySource()
+      return source ? [{ source }] : []
     },
     createTerrainOptions: () => {
       if (terrain === "tianditu") return createTiandituTerrainOptions(options)

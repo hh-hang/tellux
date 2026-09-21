@@ -290,8 +290,8 @@ export function setupWaterAreaPanel({
       setOpticsControlsDisabled(panel, true)
       panel.setStatus(
         t({
-          zh: "请输入 Cesium Ion token 后按 Enter，或在 .env 中配置 VITE_CESIUM_ION_TOKEN。",
-          en: "Enter a Cesium Ion token and press Enter, or set VITE_CESIUM_ION_TOKEN.",
+          zh: "请输入 Cesium Ion token 后按 Enter，或打开右上角设置填写。",
+          en: "Enter a Cesium Ion token and press Enter, or open Settings and paste one.",
         })
       )
       return

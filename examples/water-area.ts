@@ -1,5 +1,6 @@
 import tellux from "../src"
 import { bootExampleI18n } from "./i18n"
+import { defaultCesiumIonToken } from "./shared"
 import type { WaterAreaAppearanceOptions } from "./water-area/WaterAreaAppearance"
 import type { WaterAreaOpticsOptions } from "./water-area/WaterAreaOptics"
 import { setupWaterAreaPanel } from "./water-area/setupWaterAreaPanel"
@@ -33,7 +34,7 @@ const WATER_AREA_OPTICS: WaterAreaOpticsOptions = {
 
 const WATER_AREA_UTC_TIME = new Date(Date.UTC(2026, 7, 23, 15, 12, 18))
 
-const DEFAULT_ION_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_ION_TOKEN = defaultCesiumIonToken
 
 bootExampleI18n()
 

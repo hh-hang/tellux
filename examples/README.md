@@ -25,10 +25,11 @@ export const productionMapSourceProfile = "cesiumIon"     // Cesium Ion 影像 +
 TELLUX_TIANDITU_DEV_REFERER=https://tellux.cyanfish.site/
 ```
 
-密钥仍放在项目根 `.env`（模板见 `.env.example`）：
+Cesium Ion token 在独立示例页和 Sandcastle 右上角齿轮里填写，写入浏览器 `localStorage`（`tellux:cesium-ion-token`），本地和生产同一条路径，不读 `VITE_CESIUM_ION_TOKEN`。没有 token 时不会请求 Cesium Ion 影像或地形，设置面板会自动打开。首页、gallery 和 Sandcastle runner iframe 不挂该设置。
+
+天地图密钥仍放在项目根 `.env`（模板见 `.env.example`）：
 
 ```txt
-VITE_CESIUM_ION_TOKEN=your_token
 VITE_TIANDITU_TOKEN=your_tianditu_token
 ```
 
@@ -65,16 +66,16 @@ pnpm examples
 ```txt
 VITE_3D_TILESET_URL=https://example.com/tileset.json
 VITE_CESIUM_ION_3D_TILESET_ASSET_ID=123456
-VITE_CESIUM_ION_TOKEN=your_token
 ```
+
+Cesium Ion 3D Tiles 的 token 用右上角设置；面板里留空即使用已保存的 token。
 
 ## 点云 3D Tiles 示例
 
-`point-cloud-3d-tiles.html` 演示从 Cesium Ion 加载 pnts 点云，默认 asset 是 Melbourne Point Cloud（`43978`）。需要 `VITE_CESIUM_ION_TOKEN`，也可以换成其他点云 asset id：
+`point-cloud-3d-tiles.html` 演示从 Cesium Ion 加载 pnts 点云，默认 asset 是 Melbourne Point Cloud（`43978`）。需要右上角设置里的 Cesium Ion token，也可以换成其他点云 asset id：
 
 ```txt
 VITE_CESIUM_ION_POINT_CLOUD_ASSET_ID=43978
-VITE_CESIUM_ION_TOKEN=your_token
 ```
 
 ## 高斯泼溅 3D Tiles 示例
@@ -95,7 +96,7 @@ tileset，并挂到 Tellux 的 Three.js 场景中。
 
 GitHub 样例固定到上游提交 e5abce2422ff72eae8576c814babbec20ed8fe34。来源：[插件样例](https://github.com/WilliamLiu-1997/3D-Tiles-RendererJS-3DGS-Plugin)、[Cesium 官方教程](https://cesium.com/learn/cesiumjs-learn/3d-guassian-splat-tilesets-lods/)、[Spark](https://github.com/sparkjsdev/spark)。
 
-官方资产 4547222 的 Token 留空时使用 CesiumJS 内置公开评估 token，无需用户自己的 token。这与官方教程一致，仍是带 token 的请求，并非匿名访问。2026-09-06 已验证 endpoint、tileset 和首层 GLB 均返回 200，包含当前插件支持的高斯/SPZ 扩展。显式输入 token 优先；切换其他 Asset ID 时，留空使用 VITE_CESIUM_ION_TOKEN。公开 token 仅供评估，生产应用使用自己的凭据。
+官方资产 4547222 的 Token 留空时使用 CesiumJS 内置公开评估 token，无需用户自己的 token。这与官方教程一致，仍是带 token 的请求，并非匿名访问。2026-09-06 已验证 endpoint、tileset 和首层 GLB 均返回 200，包含当前插件支持的高斯/SPZ 扩展。显式输入 token 优先；切换其他 Asset ID 时，留空使用右上角设置里的 token。公开 token 仅供评估，生产应用使用自己的凭据。
 
 「细节误差」越低，瓦片细节越高、加载量越大；单文件模式不显示该控件。可分别切换高斯和地球显示，并用「定位资源」返回目标。Cesium ion 预设定位到案例固定的 Redmond 近景；其他 3D Tiles 在目录加载后根据包围球定位。Spark 模式支持修改为其他可解码的单文件 URL，仍使用上述展示锚点与尺度归一化。
 
@@ -109,7 +110,6 @@ Spark 2.1.0 的 ESM 上传路径通过 `pnpm-workspace.yaml` 应用 `patches/@sp
 
 ```txt
 VITE_GAUSSIAN_SPLAT_3D_TILESET_URL=https://example.com/3dgs/tileset.json
-VITE_CESIUM_ION_TOKEN=your_token
 ```
 
 ## 天地图地形示例
@@ -119,12 +119,7 @@ swdx `elv_c` 与 Cesium Ion terrain 之间切换。本地默认跟 `map-sources.
 一样走 Cesium Ion；把 `localMapSourceProfile` 改成 `'tianditu'` 后，默认地形改为
 天地图 swdx（经 Vite 代理改写 Referer）。
 
-请在项目根目录 `.env` 中配置：
-
-```txt
-VITE_TIANDITU_TOKEN=your_tianditu_token
-VITE_CESIUM_ION_TOKEN=your_token
-```
+天地图 tk 请在项目根目录 `.env` 中配置 `VITE_TIANDITU_TOKEN`。Cesium Ion 地形用右上角设置里的 token。
 
 ## Cesium 地形示例（Ion / URL）
 

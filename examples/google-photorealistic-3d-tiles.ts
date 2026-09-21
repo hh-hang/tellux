@@ -3,7 +3,7 @@ import tellux from "../src"
 import * as THREE from "three"
 import { bootExampleI18n, t } from "./i18n"
 import { createTelluxPanel, type TelluxPanel } from "./example-panel-leva"
-import { exampleMapServiceConfig } from "./shared"
+import { exampleMapServiceConfig, defaultCesiumIonToken } from "./shared"
 
 bootExampleI18n()
 
@@ -13,7 +13,7 @@ const attributionsElement = document.querySelector<HTMLElement>(
 )
 
 const GOOGLE_PHOTOREALISTIC_ASSET_ID = 2275207
-const DEFAULT_ION_TOKEN = import.meta.env.VITE_CESIUM_ION_TOKEN ?? ""
+const DEFAULT_ION_TOKEN = defaultCesiumIonToken
 const TOKYO_VIEW = {
   latitude: 35.67892292593304,
   longitude: 139.7578734062542,
@@ -35,11 +35,7 @@ const viewer = new tellux.Viewer(container, {
     currentTime: initialClockTime,
   },
   terrain: exampleMapServiceConfig.createTerrainOptions(),
-  overlays: [
-    {
-      source: exampleMapServiceConfig.createImagerySource(),
-    },
-  ],
+  overlays: exampleMapServiceConfig.createOverlays(),
   camera: {
     destination: { longitude: TOKYO_VIEW.longitude, latitude: TOKYO_VIEW.latitude, height: TOKYO_VIEW.height },
     orientation: { heading: TOKYO_VIEW.heading, pitch: TOKYO_VIEW.pitch, roll: TOKYO_VIEW.roll }
@@ -192,8 +188,8 @@ function loadGooglePhotorealisticTiles() {
   if (!apiToken) {
     setStatus(
       t({
-        zh: "请先输入 Cesium Ion token，或在 .env 中配置 VITE_CESIUM_ION_TOKEN。",
-        en: "Enter token or set VITE_CESIUM_ION_TOKEN.",
+        zh: "请先输入 Cesium Ion token，或打开右上角设置填写。",
+        en: "Enter a Cesium Ion token, or open Settings and paste one.",
       })
     )
     return
