@@ -16,6 +16,11 @@ import {
   ImageryOverlayFactory,
   type ImageryOverlayContext
 } from './ImageryOverlayFactory'
+import {
+  createOverlayDayNightParams,
+  syncOverlayDayNightOpacities,
+  type OverlayDayNightParams
+} from './overlayDayNight'
 import { SurfaceTilesetFactory } from './SurfaceTilesetFactory'
 import { TerrainTilesetFactory } from './TerrainTilesetFactory'
 import {
@@ -77,6 +82,7 @@ export class TilesetManager {
   private readonly heightSamplingAdapter = new TilesetSamplingAdapter()
   private readonly heightSamplingTilesetPool: HeightSamplingTilesetPool
   private readonly imageryOverlayFactory: ImageryOverlayFactory
+  private readonly overlayDayNightParams: OverlayDayNightParams
   private readonly surfaceTilesetFactory: SurfaceTilesetFactory
   private readonly terrainTilesetFactory: TerrainTilesetFactory
   private readonly imageryOverlayContexts = new WeakMap<TilesRenderer, ImageryOverlayContext>()
@@ -101,12 +107,14 @@ export class TilesetManager {
       renderer: options.renderer,
       transparentOverlayTexture: options.transparentOverlayTexture
     })
+    this.overlayDayNightParams = createOverlayDayNightParams()
     this.surfaceTilesetFactory = new SurfaceTilesetFactory({
       imageryOverlayFactory: this.imageryOverlayFactory,
       getSurfaceMaterialMode: () => this.options.surfaceMaterialMode,
       getSurfaceMaterialOptions: () => this.options.surfaceMaterialOptions,
       getGlobeOpacity: () => this.globeOpacity,
       useDirectOverlayTexture: options.useWebGPUCompatibleSurfaceOverlay ?? false,
+      overlayDayNightParams: this.overlayDayNightParams,
       registerCommonTilesetPlugins: (tileset) => this.registerCommonTilesetPlugins(tileset)
     })
     this.terrainTilesetFactory = new TerrainTilesetFactory({
@@ -115,6 +123,7 @@ export class TilesetManager {
       getSurfaceMaterialOptions: () => this.options.surfaceMaterialOptions,
       getGlobeOpacity: () => this.globeOpacity,
       useDirectOverlayTexture: options.useWebGPUCompatibleSurfaceOverlay ?? false,
+      overlayDayNightParams: this.overlayDayNightParams,
       registerCommonTilesetPlugins: (tileset) => this.registerCommonTilesetPlugins(tileset)
     })
     this.currentTerrain = options.terrain
@@ -370,6 +379,17 @@ export class TilesetManager {
         this.pointCloudShadingControllers.get(id)?.update()
       }
     })
+  }
+
+  updateOverlayDayNight(
+    sunDirection: THREE.Vector3,
+    worldToECEF: THREE.Matrix4
+  ) {
+    this.overlayDayNightParams.telluxSunDirection.value.copy(sunDirection)
+    this.overlayDayNightParams.telluxWorldToECEF.value.copy(worldToECEF)
+    const tileset = this.activeTerrainTileset ?? this.activeSurfaceTileset
+    const overlays = this.imageryOverlayContexts.get(tileset)?.plugin.overlays ?? []
+    syncOverlayDayNightOpacities(this.overlayDayNightParams, overlays)
   }
 
   resize() {

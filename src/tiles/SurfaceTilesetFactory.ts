@@ -8,6 +8,11 @@ import {
   type ImageryOverlayFactory
 } from './ImageryOverlayFactory'
 import {
+  OverlayDayNightPlugin,
+  createOverlayDayNightParams,
+  type OverlayDayNightParams
+} from './overlayDayNight'
+import {
   SurfaceMaterialPlugin,
   type ResolvedSurfaceMaterialMode
 } from './TilesetModelPlugins'
@@ -34,6 +39,7 @@ export type SurfaceTilesetFactoryOptions = {
   getSurfaceMaterialOptions: () => SurfaceMaterialOptions
   getGlobeOpacity?: () => number
   useDirectOverlayTexture: boolean
+  overlayDayNightParams?: OverlayDayNightParams
   registerCommonTilesetPlugins: (tileset: TilesRenderer) => void
 }
 
@@ -73,6 +79,9 @@ export class SurfaceTilesetFactory {
       applyOverlayTexture: this.options.useDirectOverlayTexture
     }) : new GeneratedSurfacePlugin({ shape: 'ellipsoid' }))
     tileset.registerPlugin(imageryContext.plugin)
+    tileset.registerPlugin(new OverlayDayNightPlugin(
+      this.options.overlayDayNightParams ?? createOverlayDayNightParams()
+    ))
     tileset.registerPlugin(surfaceMaterialPlugin)
     this.options.registerCommonTilesetPlugins(tileset)
 

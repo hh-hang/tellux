@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import { getSunDirectionECEF } from '@takram/three-atmosphere'
 import { Camera } from './Camera'
 import { Clock, type ClockChangeEvent } from './Clock'
 import { EntityManager, syncEntityManagerResolution } from './entities/EntityManager'
@@ -474,6 +475,8 @@ export class Viewer {
   private readonly renderLoop: ViewerRenderLoop
   private isDestroyed = false
   private currentResolutionScale: number
+  private readonly overlaySunDirection = new THREE.Vector3()
+  private readonly overlayWorldToECEF = new THREE.Matrix4()
   private readonly handleClockChange = (event: ClockChangeEvent) => {
     if (event.reason === 'currentTime' || event.reason === 'tick') {
       this.atmosphere?.updateSunDirection(event.currentTime)
@@ -1211,6 +1214,7 @@ export class Viewer {
     this.widgets.update(deltaTime, time)
     const currentHeight = this.syncFallbackAmbientLight()
     this.postProcessing?.updateForCameraHeight(currentHeight)
+    this.updateOverlayDayNightLighting()
     this.tilesetManager.update()
     if (this.atmosphere instanceof WebGPUAtmosphereManager) {
       this.atmosphere.setAtmosphereVisible(this.scene.atmosphere.show)
@@ -1225,6 +1229,14 @@ export class Viewer {
     this.symbolOcclusionPass?.beginFrame()
     this.rendererAdapter.render(this.scene.raw, this.threeCamera)
     this.renderSymbolsAfterComposite()
+  }
+
+  private updateOverlayDayNightLighting() {
+    getSunDirectionECEF(this.clock.currentTime, this.overlaySunDirection)
+    this.tilesetManager.updateOverlayDayNight(
+      this.overlaySunDirection,
+      this.scene.atmosphere.getWorldToECEFMatrix(this.overlayWorldToECEF)
+    )
   }
 
   /**

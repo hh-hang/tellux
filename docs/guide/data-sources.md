@@ -123,6 +123,20 @@ viewer.overlays.add({
 })
 ```
 
+夜光影像（如 Ion Black Marble `3812`）可以叠在白天底图上，用 `dayOpacity: 0` 让它只出现在背光面：
+
+```ts
+viewer.overlays.add({
+  name: 'Night lights',
+  source: {
+    type: 'cesium-ion',
+    apiToken: YOUR_CESIUM_ION_TOKEN,
+    assetId: 3812
+  },
+  style: { dayOpacity: 0 }
+})
+```
+
 ## 矢量图层
 
 ### MVT 矢量瓦片

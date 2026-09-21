@@ -233,7 +233,8 @@ viewer.overlays.add({
 const layer = viewer.overlays.add({ source: { /*...*/ } })
 
 layer.show = false                    // 显隐（或 layer.setVisible(true)）
-layer.setStyle({ opacity: 0.5 })      // 样式（opacity / color / fill / stroke...）
+layer.setStyle({ opacity: 0.5 })      // 样式（opacity / dayOpacity / nightOpacity / color / fill / stroke...）
+layer.setStyle({ dayOpacity: 0 })     // 夜光层只出现在背光面；再乘 opacity，按 clock 太阳方向混合。WebGPU 下无视觉效果。
 layer.moveTo(0)                       // 调整顺序到底层
 layer.setName('新名字')
 layer.remove()                        // 移除

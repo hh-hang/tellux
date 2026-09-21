@@ -51,6 +51,22 @@ export interface ImageryLayerStyleOptions {
    */
   opacity?: number
   /**
+   * 向阳面透明度，范围 `0` 到 `1`，默认 `1`。再乘 {@link opacity}。
+   * 按 `clock` 的太阳方向逐像素混合，不依赖光照模式。
+   *
+   * Day-side opacity from `0` to `1`. Defaults to `1`. Multiplied with
+   * {@link opacity}. Mixed per fragment from the clock sun direction;
+   * independent of lighting mode.
+   */
+  dayOpacity?: number
+  /**
+   * 背光面透明度，范围 `0` 到 `1`，默认 `1`。再乘 {@link opacity}。
+   *
+   * Night-side opacity from `0` to `1`. Defaults to `1`. Multiplied with
+   * {@link opacity}.
+   */
+  nightOpacity?: number
+  /**
    * 图层颜色乘色。
    *
    * Layer color tint.

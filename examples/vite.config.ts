@@ -143,6 +143,7 @@ const htmlInputs = {
   index: resolve(__dirname, "index.html"),
   gallery: resolve(__dirname, "gallery.html"),
   basic: resolve(__dirname, "basic.html"),
+  earthAtNight: resolve(__dirname, "earth-at-night.html"),
   flyTo: resolve(__dirname, "fly-to.html"),
   dataSources: resolve(__dirname, "data-sources.html"),
   tiles3d: resolve(__dirname, "3d-tiles.html"),

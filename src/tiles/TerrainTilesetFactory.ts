@@ -20,6 +20,11 @@ import {
   SurfaceMaterialPlugin,
   type ResolvedSurfaceMaterialMode
 } from './TilesetModelPlugins'
+import {
+  OverlayDayNightPlugin,
+  createOverlayDayNightParams,
+  type OverlayDayNightParams
+} from './overlayDayNight'
 import { WebGPUTerrainOverlayPlugin } from './WebGPUTerrainOverlayPlugin'
 
 export type TerrainTilesetFactoryOptions = {
@@ -28,6 +33,7 @@ export type TerrainTilesetFactoryOptions = {
   getSurfaceMaterialOptions: () => SurfaceMaterialOptions
   getGlobeOpacity?: () => number
   useDirectOverlayTexture: boolean
+  overlayDayNightParams?: OverlayDayNightParams
   registerCommonTilesetPlugins: (tileset: TilesRenderer) => void
 }
 
@@ -73,6 +79,9 @@ export class TerrainTilesetFactory {
     this.registerTerrainProvider(tileset, terrain)
     imageryContext.plugin = imageryPlugin
     tileset.registerPlugin(imageryPlugin)
+    tileset.registerPlugin(new OverlayDayNightPlugin(
+      this.options.overlayDayNightParams ?? createOverlayDayNightParams()
+    ))
     tileset.registerPlugin(surfaceMaterialPlugin)
     this.options.registerCommonTilesetPlugins(tileset)
 

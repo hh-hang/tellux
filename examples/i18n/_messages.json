@@ -539,6 +539,18 @@
     "完整页面示例，可编辑 JavaScript 和 HTML/CSS 后重新运行。",
     "Full-page example. Edit JavaScript and HTML/CSS, then run again."
   ],
+  "example.earth-at-night.registry.title": [
+    "昼夜影像",
+    "Day / Night Imagery"
+  ],
+  "example.earth-at-night.registry.description": [
+    "两层 overlay 的 dayOpacity / nightOpacity，按太阳方向混合晨昏线。",
+    "Two overlays with dayOpacity / nightOpacity mixed along the terminator."
+  ],
+  "example.earth-at-night.title": [
+    "昼夜影像",
+    "Day / Night Imagery"
+  ],
   "example.webgpu-basic.registry.title": [
     "WebGPU 地球",
     "WebGPU Globe"

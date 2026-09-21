@@ -165,7 +165,24 @@ layer.setStyle({
 })
 ```
 
-`opacity` 是栅格影像图层最常用的样式参数，范围 `0` 到 `1`。`fill`、`stroke`、`strokeWidth`、`pointRadius`、`getStyle` 主要用于 GeoJSON 和 MVT 矢量图层（见下文）。
+`opacity` 是栅格影像图层最常用的样式参数，范围 `0` 到 `1`。`dayOpacity` / `nightOpacity` 再乘 `opacity`，按 `clock` 的太阳方向逐像素混合向阳面和背光面；默认都是 `1`，不写就和只设 `opacity` 一样。不依赖 `light-source` / `post-process`。`fill`、`stroke`、`strokeWidth`、`pointRadius`、`getStyle` 主要用于 GeoJSON 和 MVT 矢量图层（见下文）。
+
+夜光只出现在背光面时：
+
+```ts
+viewer.overlays.add({
+  name: 'Night lights',
+  source: {
+    type: 'xyz',
+    url: 'https://example.com/night-lights/{z}/{y}/{x}',
+    levels: 9
+  },
+  style: {
+    dayOpacity: 0,
+    nightOpacity: 1
+  }
+})
+```
 
 ### 图层排序
 

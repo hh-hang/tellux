@@ -42,7 +42,7 @@ npm install @mapbox/vector-tile pbf
 
 ## ✨ Features
 
-- **Terrain & Imagery**: Cesium Quantized Mesh terrain, XYZ, WMS, WMTS, Cesium Ion imagery, and draped GeoJSON / MVT vector layers.
+- **Terrain & Imagery**: Cesium Quantized Mesh terrain, XYZ, WMS, WMTS, Cesium Ion imagery, and draped GeoJSON / MVT vector layers, with per-overlay day/night opacity.
 - **Entity**: Point, polyline, and polygon graphics, plus screen-space icons and text labels; clamp to terrain and 3D Tiles, extrude polygons, and take part in picking and order-independent transparency.
 - **3D Tiles & Gaussian Splatting**: Load URL or Cesium Ion 3D Tiles, glTF / GLB models with animation, and 3D Gaussian Splatting scenes.
 - **Atmosphere & Rendering Effects**: Atmospheric sky, aerial perspective, volumetric clouds, day-night lighting, SMAA, lens flare, and other advanced effects.

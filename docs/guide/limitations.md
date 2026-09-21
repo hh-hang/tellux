@@ -19,6 +19,7 @@ WebGPU 是实验能力，以下能力在 WebGPU 模式下**不渲染或不支持
 | 后处理 | Bloom、LensFlare 与 TAA 支持；SMAA / 抖动不渲染，调整开关无视觉效果 |
 | 瓦片 LOD 淡入淡出 | 不可用，瓦片为直接切换（pop） |
 | 大气散射调试参数 | 部分参数不映射，`light-source` 光照模式支持更完整 |
+| overlay `dayOpacity` / `nightOpacity` | 无视觉效果（WebGPU 地形走单贴图快路径，不跑多层 overlay 合成 shader） |
 
 - WebGPU 模式**不会在不支持的环境上自动回退 WebGL**：不支持时 `renderer.init()` 会 reject，`Viewer.create(...)` 抛错。应用层需自行检测，或设置 `renderer.forceWebGL: true` 走 WebGL2 fallback backend。
 - WebGPU renderer 需异步初始化，推荐用 `Viewer.create(...)`；用 `new Viewer(...)` 时先 `await viewer.ready`。
@@ -36,7 +37,7 @@ WebGPU 是实验能力，以下能力在 WebGPU 模式下**不渲染或不支持
 
 - 栅格影像支持 XYZ、WMS、WMTS、Cesium Ion 四种栅格源；矢量图层支持 GeoJSON 和 MVT。
 - GeoJSON / MVT 图层是**把矢量内容栅格化成纹理**贴到地表，不是矢量几何直接渲染。样式以像素为单位，受 `resolution` 影响；极度放大时会出现纹理模糊。
-- 图层透明度 `opacity` 作用于整层；`color` 乘色作用于整层色调。这不是地球皮肤透明度；淡整张皮肤用 `viewer.globe.opacity`。
+- 图层透明度 `opacity` 作用于整层；`dayOpacity` / `nightOpacity` 再乘 `opacity`，按太阳方向逐像素混合向阳面和背光面。`color` 乘色作用于整层色调。这不是地球皮肤透明度；淡整张皮肤用 `viewer.globe.opacity`。WebGPU 下这两项没有视觉效果。
 
 ### 3D Tiles
 

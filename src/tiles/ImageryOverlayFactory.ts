@@ -21,6 +21,7 @@ import type {
   WMTSImagerySourceOptions
 } from '../types'
 import type { TelluxRenderer } from '../rendering/RendererAdapter'
+import { applyOverlayDayNightStyle } from './overlayDayNight'
 
 type MVTOverlayOptions = {
   url: string
@@ -94,6 +95,7 @@ export type ImageryOverlayContextOptions = {
 }
 
 export type ImageryOverlayPluginLike = {
+  overlays?: ImageOverlay[]
   addOverlay(overlay: ImageOverlay, order?: number): void
   setOverlayOrder(overlay: ImageOverlay, order?: number): void
   deleteOverlay(overlay: ImageOverlay): void
@@ -184,12 +186,14 @@ export class ImageryOverlayFactory {
     }
 
     this.patchRegionVisibilityGuard(overlay)
+    applyOverlayDayNightStyle(overlay, style)
     return overlay
   }
 
   applyLayerStyleToOverlay(layer: ImageryLayer, overlay: ImageOverlay) {
     const style = layer.getStyle()
     overlay.opacity = style.opacity ?? 1
+    applyOverlayDayNightStyle(overlay, style)
     if (style.color !== undefined) {
       overlay.color = new THREE.Color(style.color)
     } else if (overlay.color instanceof THREE.Color) {
